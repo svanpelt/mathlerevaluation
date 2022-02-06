@@ -18,7 +18,7 @@ function create_valid_equations() {
 	
 	let valid = {};
 	results.forEach(eq => {
-		let value = eval(eq.replace('^', '**'));
+		let value = eval(eq);
 		if (value < 100 && value > -1 && Number.isInteger(value)) {
 			if (valid[value] != null) {
 				let newArray = valid[value];
@@ -53,9 +53,6 @@ function nest_valid_symbols(i, results, start) {
 }
 
 function is_valid_char(start, char) {
-  if (char === '!' && symbols.includes(start.charAt(start.length - 1))) {
-  	return false;
-  }
   if (symbols.includes(char) && symbols.includes(start.charAt(start.length - 1))) {
 
   	return false;
