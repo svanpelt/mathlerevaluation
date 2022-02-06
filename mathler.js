@@ -1,13 +1,13 @@
 
-const symbols = ['-', '+', '/', '*'];
+const symbols = ['-', '+', '/',  '*'];
 const numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 const valid_entries = {
 	0: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
-	1: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*'],
-	2: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*'],
-	3: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*'],
-	4: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*'],
-	5: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+	1: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*',],
+	2: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*', ],
+	3: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*', ],
+	4: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '+', '/', '*', ],
+	5: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0',],
 };
 
 create_valid_equations();
@@ -15,10 +15,10 @@ create_valid_equations();
 function create_valid_equations() {
 	let results = [];
 	nest_valid_symbols(0, results, "");
-	let evals = results.map(eq => eval(eq));
+	
 	let valid = {};
 	results.forEach(eq => {
-		let value = eval(eq);
+		let value = eval(eq.replace('^', '**'));
 		if (value < 100 && value > -1 && Number.isInteger(value)) {
 			if (valid[value] != null) {
 				let newArray = valid[value];
@@ -32,15 +32,9 @@ function create_valid_equations() {
 	for (const [key, value] of Object.entries(valid)) {
 		counts[key] = value.length;
 	}
+
+
 	console.log(JSON.stringify(counts));
-	/*for (let i = 20; i< 35; i++) {
-		let key = Math.floor(Math.random() * (Object.keys(valid).length - 1));
-		let list = valid[key];
-		for (let j = 0; j < 10; j ++) {
-			answer = list[Math.floor(Math.random() * list.length - 1)];
-			filter_valid_constraints(list, [list[Math.floor(Math.random() * list.length - 1)], answer], answer);
-		}
-	}*/
 }
 
 function nest_valid_symbols(i, results, start) {
@@ -59,6 +53,9 @@ function nest_valid_symbols(i, results, start) {
 }
 
 function is_valid_char(start, char) {
+  if (char === '!' && symbols.includes(start.charAt(start.length - 1))) {
+  	return false;
+  }
   if (symbols.includes(char) && symbols.includes(start.charAt(start.length - 1))) {
 
   	return false;
@@ -100,7 +97,7 @@ function filter_valid_constraints(valid, guesses, word, log = true) {
 	  filtered_valid = filter_valid_constraints_single(filtered_valid, guess, word);
 	if (log === true){
 		console.log(guess + ": " + filtered_valid.length + " remaining words")
-		//console.log(filtered_valid);
+		console.log(filtered_valid);
 		// bad_option = pick_bad_guess(filtered_valid, word);
 	}
 	remaining.push(filtered_valid.length);
